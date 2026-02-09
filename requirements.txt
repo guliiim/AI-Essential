@@ -1,0 +1,15 @@
+langchain
+langchain-community
+langchain-google-genai
+qdrant-client
+python-dotenv
+pandas
+PyPDF2
+ollama
+numpy
+pandas
+openpyxl
+google-generativeai
+requests
+tqdm
+
