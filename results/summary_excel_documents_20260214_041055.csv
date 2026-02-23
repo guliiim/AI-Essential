@@ -1,0 +1,2 @@
+timestamp,collection_name,rag_model,judge_model,total_questions,correct_count,accuracy
+20260214_041055,excel_documents,gemini-2.5-flash,gemini-2.5-flash,60,1,0.016666666666666666
