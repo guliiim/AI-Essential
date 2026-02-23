@@ -2,7 +2,7 @@ from pathlib import Path
 from typing import List
 import PyPDF2
 
-
+#Extract text from a PDF file and split it into overlapping chunks.
 def pdf2chunks(filepath: Path, chunk_size: int = 1000, chunk_overlap: int = 200) -> List[str]:
     """
     Extract text from a PDF file and split it into overlapping chunks.
