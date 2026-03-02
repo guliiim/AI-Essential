@@ -129,59 +129,33 @@ class QdrantManager:
 
     def search_point(self, embedding: List[float], collection_name: str, top_k: int = 5,
                      score_threshold: float = 0.75) -> List[str]:
-        """
-        Search for similar points in the collection.
-
-        Args:
-            embedding: Query embedding vector
-            collection_name: Name of the collection to search
-            top_k: Number of top results to return
-            score_threshold: Minimum similarity score (0-1 for cosine)
-
-        Returns:
-            List of text chunks that match the query
-        """
         try:
-            results = self.client.search(
+            results = self.client.query_points(
                 collection_name=collection_name,
-                query_vector=embedding,
+                query=embedding,
                 limit=top_k,
-                score_threshold=score_threshold
-            )
+                score_threshold=score_threshold,
+                with_payload=True,
+            ).points
 
-            # Extract text from results
-            texts = [hit.payload.get("text", "") for hit in results]
-            return texts
+            return [hit.payload.get("text", "") for hit in results]
         except Exception as e:
             print(f"Error searching: {e}")
             return []
 
-    def search_by_text(self, query_text: str, collection_name: str, top_k: int = 5, score_threshold: float = 0.75) -> \
+    def search_by_text(self, query_text: str, collection_name: str, top_k: int = 5, score_threshold: float = 0.0) -> \
     List[dict]:
-        """
-        Search using text query (automatically converts to embedding).
-
-        Args:
-            query_text: Text query to search for
-            collection_name: Name of the collection to search
-            top_k: Number of top results to return
-            score_threshold: Minimum similarity score
-
-        Returns:
-            List of dicts containing text and score
-        """
-        # Get embedding for query text
         query_embedding = self.get_embedding(query_text)
 
         try:
-            results = self.client.search(
+            results = self.client.query_points(
                 collection_name=collection_name,
-                query_vector=query_embedding,
+                query=query_embedding,
                 limit=top_k,
-                score_threshold=score_threshold
-            )
+                score_threshold=score_threshold,
+                with_payload=True,
+            ).points
 
-            # Return text and scores
             return [
                 {
                     "text": hit.payload.get("text", ""),
